@@ -15,10 +15,13 @@ public class TesticleMovement : MonoBehaviour
 
     public Vector2 direction;
 
+    public Vector3 raycastOffset;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        raycastOffset = new Vector3(0, 0.5f, 0);
         BallLaunch();
         rb = gameObject.GetComponent<Rigidbody2D>();
 
@@ -28,6 +31,24 @@ public class TesticleMovement : MonoBehaviour
     void Update()
     {
         BallMovement();
+
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1000.0f);
+
+        Debug.DrawRay(this.transform.position + raycastOffset, Vector3.forward, Color.white, 100.0f);
+
+        if (hit.collider != null)
+        {
+            if (hit.collider.tag == "TopWall")
+            {
+                Debug.Log(hit.collider.tag);
+            }
+
+            if (hit.collider.tag == "BottomWall")
+            {
+                Debug.Log(hit.collider.tag);
+            }
+        }
     }
 
     void BallLaunch()
@@ -62,10 +83,7 @@ public class TesticleMovement : MonoBehaviour
     void BallMovement()
     {
         transform.Translate(Vector3.up * speed * Time.deltaTime);
-    }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-
+        
     }
 }

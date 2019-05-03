@@ -489,6 +489,7 @@ MonoBehaviour:
   reflection: {x: 0, y: 0}
   rb: {fileID: 0}
   direction: {x: 0, y: 0}
+  raycastOffset: {x: 0, y: 0, z: 0}
 --- !u!58 &1403679969
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -856,7 +857,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
