@@ -35,6 +35,8 @@ public class TesticleMovement : MonoBehaviour
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1000.0f);
 
+        print("working");
+
         Debug.DrawRay(this.transform.position + raycastOffset, Vector3.forward, Color.white, 100.0f);
 
         if (hit.collider != null)
