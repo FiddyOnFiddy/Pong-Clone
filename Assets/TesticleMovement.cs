@@ -33,10 +33,11 @@ public class TesticleMovement : MonoBehaviour
         BallMovement();
 
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1000.0f);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up);
 
 
-        Debug.DrawRay(this.transform.position + raycastOffset, Vector3.forward, Color.white, 100.0f);
+        Debug.DrawRay(this.transform.position, transform.up, Color.white, hit.distance);
+
 
         if (hit.collider != null)
         {
@@ -51,7 +52,10 @@ public class TesticleMovement : MonoBehaviour
             {
                 Debug.Log(hit.collider.tag);
             }
+
         }
+
+
     }
 
     void BallLaunch()
@@ -85,7 +89,7 @@ public class TesticleMovement : MonoBehaviour
 
     void BallMovement()
     {
-        transform.Translate(Vector3.up * speed * Time.deltaTime);
+        transform.Translate(Vector2.up * speed * Time.deltaTime);
 
         
     }
