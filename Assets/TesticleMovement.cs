@@ -32,20 +32,19 @@ public class TesticleMovement : MonoBehaviour
     {
         BallMovement();
 
+        Ray2D ray = new Ray2D(transform.position, transform.up);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+        
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up);
-
-
-        Debug.DrawRay(this.transform.position, transform.up, Color.white, hit.distance);
+        Debug.DrawRay(ray.origin, ray.direction, Color.white);
 
 
         if (hit.collider != null)
         {
-            print("working");
-
             if (hit.collider.tag == "TopWall")
             {
                 Debug.Log(hit.collider.tag);
+                
             }
 
             if (hit.collider.tag == "BottomWall")
