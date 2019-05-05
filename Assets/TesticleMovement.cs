@@ -12,16 +12,15 @@ public class TesticleMovement : MonoBehaviour
     public Vector3 currentRotation;
     public Vector2 reflection;
     public Rigidbody2D rb;
+    public Ray2D ray;
+    public RaycastHit2D hit;
+    public Vector3 direction;
 
-    public Vector2 direction;
-
-    public Vector3 raycastOffset;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        raycastOffset = new Vector3(0, 0.5f, 0);
         BallLaunch();
         rb = gameObject.GetComponent<Rigidbody2D>();
 
@@ -31,31 +30,9 @@ public class TesticleMovement : MonoBehaviour
     void Update()
     {
         BallMovement();
-
-        Ray2D ray = new Ray2D(transform.position, transform.up);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-        
-
-        Debug.DrawRay(ray.origin, ray.direction, Color.white);
-
-
-        if (hit.collider != null)
-        {
-            if (hit.collider.tag == "TopWall")
-            {
-                Debug.Log(hit.collider.tag);
-                
-            }
-
-            if (hit.collider.tag == "BottomWall")
-            {
-                Debug.Log(hit.collider.tag);
-            }
-
-        }
-
-
+        ReflectBall();
     }
+
 
     void BallLaunch()
     {
@@ -89,7 +66,32 @@ public class TesticleMovement : MonoBehaviour
     void BallMovement()
     {
         transform.Translate(Vector2.up * speed * Time.deltaTime);
-
-        
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(ray.origin, hit.point);
+
+    }
+
+    void ReflectBall()
+    {
+        direction = transform.up;
+
+        ray = new Ray2D(transform.position, transform.up);
+        hit = Physics2D.Raycast(ray.origin, ray.direction, 100.0f);
+
+        if (hit.collider != null)
+        {
+            if (hit.collider.tag == "TopWall")
+            {
+                direction = Vector3.Reflect(ray.origin, hit.normal);
+            }
+        }
+
+
+        Debug.Log(hit.collider.tag);
+    }
+
+
 }
