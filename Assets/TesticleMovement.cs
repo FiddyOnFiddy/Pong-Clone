@@ -12,9 +12,14 @@ public class TesticleMovement : MonoBehaviour
     public Vector3 currentRotation;
     public Vector2 reflection;
     public Rigidbody2D rb;
+
     public Ray2D ray;
     public RaycastHit2D hit;
     public Vector3 direction;
+
+    public Vector3 initialVeclocity;
+    public Vector3 lastFrameVelocity;
+    public float minVelocity = 10.0f;
 
 
 
@@ -23,14 +28,17 @@ public class TesticleMovement : MonoBehaviour
     {
         BallLaunch();
         rb = gameObject.GetComponent<Rigidbody2D>();
-
+        rb.velocity = initialVeclocity;
+        rb.velocity = transform.up * speed;
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        lastFrameVelocity = rb.velocity;
         BallMovement();
-        ReflectBall();
+
     }
 
 
@@ -65,33 +73,21 @@ public class TesticleMovement : MonoBehaviour
 
     void BallMovement()
     {
-        transform.Translate(Vector2.up * speed * Time.deltaTime);
+        //transform.Translate(Vector2.up * speed * Time.deltaTime);        
     }
 
-    private void OnDrawGizmos()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        Gizmos.DrawLine(ray.origin, hit.point);
-
+        Bounce(collision.contacts[0].normal);
+        minVelocity += 2;
     }
 
-    void ReflectBall()
+    void Bounce(Vector3 collisionNormal)
     {
-        direction = transform.up;
+        float speed = lastFrameVelocity.magnitude;
+        Vector2 direction = Vector2.Reflect(lastFrameVelocity.normalized, collisionNormal);
 
-        ray = new Ray2D(transform.position, transform.up);
-        hit = Physics2D.Raycast(ray.origin, ray.direction, 100.0f);
-
-        if (hit.collider != null)
-        {
-            if (hit.collider.tag == "TopWall")
-            {
-                direction = Vector3.Reflect(ray.origin, hit.normal);
-            }
-        }
-
-
-        Debug.Log(hit.collider.tag);
+        Debug.Log("Out Direction: " + direction);
+        rb.velocity = direction * Mathf.Max(speed , minVelocity);
     }
-
-
 }
